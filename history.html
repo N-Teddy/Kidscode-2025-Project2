@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History - My Personal Expense Advisor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @keyframes bounce-gentle {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-bounce-gentle {
+            animation: bounce-gentle 2s infinite;
+        }
+
+        .animate-fade-in {
+            animation: fade-in 1s ease-out;
+        }
+
+        .animate-fade-in-delay {
+            animation: fade-in 1s ease-out 0.3s both;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 min-h-screen">
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                        <span class="text-white text-xl font-bold">💰</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">MoneyMate</h1>
+                        <p class="text-xs text-gray-500">Your Financial Friend</p>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <a href="dashboard.html"
+                        class="bg-purple-100 hover:bg-purple-200 text-purple-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-1">
+                        <span>📊</span><span class="hidden sm:inline">Dashboard</span>
+                    </a>
+                    <a href="savings-plan.html"
+                        class="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-1">
+                        <span>🎯</span><span class="hidden sm:inline">Savings Plan</span>
+                    </a>
+                    <a href="history.html"
+                        class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-1">
+                        <span>📈</span><span class="hidden sm:inline">History</span>
+                    </a>
+                    <button id="logoutBtn"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-1">
+                        <span>🚪</span><span class="hidden sm:inline">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- History Header -->
+        <div class="bg-white rounded-3xl shadow-xl p-6 mb-8 text-center animate-fade-in">
+            <h1
+                class="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
+                Financial History & Follow-up 📈
+            </h1>
+            <p class="text-gray-600 text-lg">Track your monthly progress and view spending patterns over time!</p>
+        </div>
+
+        <!-- Monthly Follow-up Form -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8 animate-fade-in-delay">
+            <div class="text-center mb-6">
+                <!-- <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b1f0d64a-6622-4e60-9989-d1d3c5e73126.png"
+                    alt="Cartoon character with calendar and calculator, tracking monthly expenses, colorful child-friendly illustration"
+                    class="mx-auto rounded-lg shadow-md mb-4" /> -->
+                <h2 class="text-2xl font-bold text-gray-800">📅 Add Monthly Data</h2>
+                <p class="text-gray-600">Record your actual income and expenses for this month</p>
+            </div>
+
+            <form id="monthlyForm" class="space-y-6">
+                <!-- Error Message Container -->
+                <div id="errorMessage" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg">
+                    <p class="text-sm font-medium"></p>
+                </div>
+
+                <!-- Month Selection -->
+                <div>
+                    <label for="month" class="block text-lg font-bold text-gray-700 mb-2">
+                        📅 Select Month
+                    </label>
+                    <select id="month" name="month" required
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-lg">
+                        <option value="">Choose Month</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                    </select>
+                    <input type="hidden" id="year" name="year" value="">
+                </div>
+
+                <!-- Monthly Income -->
+                <div>
+                    <label for="income" class="block text-lg font-bold text-gray-700 mb-2">
+                        💰 Actual Monthly Income (XAF)
+                    </label>
+                    <input type="number" id="income" name="income" min="0" required
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300 text-lg">
+                </div>
+
+                <!-- Actual Expenses -->
+                <h3 class="text-xl font-bold text-gray-800 mt-8 mb-4">📋 Actual Monthly Expenses</h3>
+
+                <!-- Fixed Expenses -->
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h4 class="text-lg font-bold text-blue-800 mb-4">🏠 Fixed Expenses</h4>
+                    <div>
+                        <label for="rent" class="block text-sm font-bold text-gray-700 mb-2">
+                            🏠 Rent (XAF)
+                        </label>
+                        <input type="number" id="rent" name="rent" min="0" required
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300">
+                    </div>
+                </div>
+
+                <!-- Flexible Expenses -->
+                <div class="bg-yellow-50 p-6 rounded-lg">
+                    <h4 class="text-lg font-bold text-yellow-800 mb-4">🛍️ Flexible Expenses</h4>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="food" class="block text-sm font-bold text-gray-700 mb-2">
+                                🍔 Food (XAF)
+                            </label>
+                            <input type="number" id="food" name="food" min="0" required
+                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 transition-all duration-300">
+                        </div>
+                        <div>
+                            <label for="clothes" class="block text-sm font-bold text-gray-700 mb-2">
+                                👕 Clothes (XAF)
+                            </label>
+                            <input type="number" id="clothes" name="clothes" min="0" required
+                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 transition-all duration-300">
+                        </div>
+                        <div>
+                            <label for="transport" class="block text-sm font-bold text-gray-700 mb-2">
+                                🚗 Transport (XAF)
+                            </label>
+                            <input type="number" id="transport" name="transport" min="0" required
+                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 transition-all duration-300">
+                        </div>
+                        <div>
+                            <label for="leisure" class="block text-sm font-bold text-gray-700 mb-2">
+                                🎮 Leisure (XAF)
+                            </label>
+                            <input type="number" id="leisure" name="leisure" min="0" required
+                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 transition-all duration-300">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="other" class="block text-sm font-bold text-gray-700 mb-2">
+                                📦 Other (XAF)
+                            </label>
+                            <input type="number" id="other" name="other" min="0" required
+                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 transition-all duration-300">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 px-8 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 text-xl">
+                    📊 Submit Monthly Data
+                </button>
+            </form>
+        </div>
+
+        <!-- Data Visualization Section -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8 animate-fade-in-delay">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">📊 Spending Analysis</h2>
+
+            <!-- Month Tabs -->
+            <div id="monthTabs" class="flex flex-wrap justify-center gap-2 mb-6">
+                <button class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg text-sm">
+                    No data available
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="tabContent">
+                <!-- Comparison with Original Plan -->
+                <div id="comparisonSection" class="mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">📋 Plan vs Reality Comparison</h3>
+                    <div id="comparisonContent" class="text-center text-gray-500 py-4">
+                        <p>Add monthly data to see how your actual spending compares to your original plan!</p>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div id="chartSection" class="mt-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">📈 Monthly Spending Chart</h3>
+                    <div id="chartContainer" class="bg-gray-50 p-6 rounded-lg">
+                        <canvas id="expenseChart" width="400" height="200"></canvas>
+                        <div id="chartContent" class="text-center text-gray-500 py-8">
+                            <p>No data available yet. Submit your monthly expenses to see the chart!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Records History -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8 animate-fade-in-delay">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">📅 Your Monthly Records</h2>
+
+            <div id="monthlyRecords" class="space-y-4">
+                <div class="text-center text-gray-500 py-8">
+                    <p class="text-lg">No monthly records yet!</p>
+                    <p>Use the form above to add your first monthly follow-up data.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Savings Plan Logic -->
+    <script>
+        let currentUser = localStorage.getItem('currentUser');
+
+        // Check if user is logged in
+        if (!currentUser) {
+            alert('Please login first!');
+            window.location.href = 'login.html';
+        }
+
+        // Format currency with thousand separators
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US').format(amount) + ' XAF';
+        }
+
+        // Update star rating based on savings achievement percentage
+        function updateStarRating(percentage) {
+            const stars = document.querySelectorAll('#starRating span');
+            const starMessage = document.getElementById('starMessage');
+
+            let starCount = 0;
+            if (percentage >= 20) starCount = 1;
+            if (percentage >= 40) starCount = 2;
+            if (percentage >= 60) starCount = 3;
+            if (percentage >= 80) starCount = 4;
+            if (percentage >= 100) starCount = 5;
+
+            // Update star display
+            stars.forEach((star, index) => {
+                if (index < starCount) {
+                    star.className = 'text-4xl text-yellow-400';
+                } else {
+                    star.className = 'text-4xl text-gray-300';
+                }
+            });
+
+            // Update message
+            const messages = [
+                "Just getting started! Keep going! 🌱",
+                "Good progress! You're on track! 🚀",
+                "Great work! You're doing amazing! ⭐",
+                "Excellent! You're a savings superstar! 🌟",
+                "Perfect! You've mastered saving! 👑"
+            ];
+
+            starMessage.textContent = starCount > 0 ? messages[starCount - 1] : "Achieve your savings goals to earn stars!";
+        }
+
+        // Calculate and update progress
+        function updateProgress() {
+            const financialData = JSON.parse(localStorage.getItem(`financialData_${currentUser}`) || '[]');
+            const monthlyData = JSON.parse(localStorage.getItem(`monthlyData_${currentUser}`) || '[]');
+
+            if (financialData.length === 0) {
+                return; // No plan created yet
+            }
+
+            const latestPlan = financialData[financialData.length - 1];
+
+            // Calculate total actual savings from monthly records
+            let totalActualSavings = 0;
+            monthlyData.forEach(record => {
+                const monthlyIncome = record.income || 0;
+                const monthlyExpenses = (record.rent || 0) + (record.food || 0) + (record.clothes || 0) +
+                    (record.transport || 0) + (record.leisure || 0) + (record.other || 0);
+                const monthlySavings = Math.max(0, monthlyIncome - monthlyExpenses);
+                totalActualSavings += monthlySavings;
+            });
+
+            // Calculate target savings (goal × number of months with data)
+            const targetSavings = latestPlan.savingsGoal * Math.max(1, monthlyData.length);
+            const progressPercentage = targetSavings > 0 ? Math.min(100, (totalActualSavings / targetSavings) * 100) : 0;
+
+            // Update progress bar
+            document.getElementById('progressBar').style.width = progressPercentage + '%';
+            document.getElementById('progressPercentage').textContent = progressPercentage.toFixed(1) + '%';
+            document.getElementById('progressText').textContent =
+                `You've saved ${formatCurrency(totalActualSavings)} of your ${formatCurrency(targetSavings)} target!`;
+
+            // Update star rating
+            updateStarRating(progressPercentage);
+        }
+
+        // Generate detailed expense reduction advice
+        function generateExpenseAdvice(planData, plan) {
+            const expenseBreakdown = document.getElementById('expenseBreakdown');
+            const reductionDetails = document.getElementById('reductionDetails');
+
+            if (plan.status === 'deficit') {
+                expenseBreakdown.classList.remove('hidden');
+
+                const totalExpenses = planData.rent + planData.food + planData.clothes +
+                    planData.transport + planData.leisure + planData.other;
+                const flexibleExpenses = planData.food + planData.clothes + planData.transport +
+                    planData.leisure + planData.other;
+                const deficit = totalExpenses - planData.monthlyRevenue;
+
+                // Calculate reduction needed (20% of flexible expenses or deficit, whichever is smaller)
+                const reductionNeeded = Math.min(flexibleExpenses * 0.2, deficit);
+
+                // Distribute reduction across flexible categories proportionally
+                const categories = [
+                    { name: 'Food', emoji: '🍔', amount: planData.food, key: 'food' },
+                    { name: 'Clothes', emoji: '👕', amount: planData.clothes, key: 'clothes' },
+                    { name: 'Transport', emoji: '🚗', amount: planData.transport, key: 'transport' },
+                    { name: 'Leisure', emoji: '🎮', amount: planData.leisure, key: 'leisure' },
+                    { name: 'Other', emoji: '📦', amount: planData.other, key: 'other' }
+                ];
+
+                let adviceHTML = '';
+
+                categories.forEach(category => {
+                    if (category.amount > 0) {
+                        // Calculate proportional reduction for this category
+                        const categoryReduction = (category.amount / flexibleExpenses) * reductionNeeded;
+                        const newAmount = category.amount - categoryReduction;
+                        const reductionPercentage = ((categoryReduction / category.amount) * 100).toFixed(1);
+
+                        // Generate specific advice for each category
+                        const advice = getSpecificAdvice(category.key, categoryReduction);
+
+                        adviceHTML += `
+                            <div class="bg-white p-4 rounded-lg border-l-4 border-orange-400">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-2xl mr-2">${category.emoji}</span>
+                                    <h4 class="font-bold text-gray-800">${category.name}</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">
+                                    Current: ${formatCurrency(category.amount)} →
+                                    <span class="font-semibold text-green-600">Target: ${formatCurrency(newAmount)}</span>
+                                </p>
+                                <p class="text-sm text-orange-700 font-medium mb-2">
+                                    Reduce by ${formatCurrency(categoryReduction)} (${reductionPercentage}%)
+                                </p>
+                                <p class="text-xs text-gray-600">${advice}</p>
+                            </div>
+                        `;
+                    }
+                });
+
+                reductionDetails.innerHTML = adviceHTML;
+            } else {
+                expenseBreakdown.classList.add('hidden');
+            }
+        }
+
+        // Get specific advice for each expense category
+        function getSpecificAdvice(category, reductionAmount) {
+            const adviceMap = {
+                food: `💡 Try cooking more meals at home, buy generic brands, or plan your meals to avoid waste. Look for discounts and shop with a list!`,
+                clothes: `💡 Shop only when necessary, look for sales, consider second-hand options, or swap clothes with friends and family.`,
+                transport: `💡 Walk or bike for short distances, use public transport, carpool with friends, or combine multiple errands in one trip.`,
+                leisure: `💡 Choose free activities like reading, playing outdoor games, or visiting free parks instead of paid entertainment.`,
+                other: `💡 Review this category carefully - avoid impulse purchases, compare prices before buying, and ask yourself "Do I really need this?"`
+            };
+
+            return adviceMap[category] || '💡 Look for ways to reduce this expense through careful planning and smart choices.';
+        }
+
+        // Load and display plan
+        function loadPlan() {
+            const financialData = JSON.parse(localStorage.getItem(`financialData_${currentUser}`) || '[]');
+
+            if (financialData.length === 0) {
+                document.getElementById('planMessage').textContent = 'No plan found! Please create your budget in the Dashboard first.';
+                document.getElementById('planSuggestion').textContent = 'Go to Dashboard to set up your financial plan.';
+                document.getElementById('recommendedSavings').textContent = '0 XAF';
+                return;
+            }
+
+            const latestPlan = financialData[financialData.length - 1];
+            const plan = latestPlan.plan;
+
+            // Display plan information
+            document.getElementById('planMessage').textContent = plan.message;
+            document.getElementById('planSuggestion').textContent = plan.suggestion;
+            document.getElementById('recommendedSavings').textContent = formatCurrency(plan.recommendedSavings);
+
+            // Generate detailed expense advice
+            generateExpenseAdvice(latestPlan, plan);
+
+            // Update progress
+            updateProgress();
+        }
+
+        // Load monthly records
+        function loadMonthlyRecords() {
+            const monthlyData = JSON.parse(localStorage.getItem(`monthlyData_${currentUser}`) || '[]');
+            const recordsContainer = document.getElementById('monthlyRecords');
+
+            if (monthlyData.length === 0) {
+                return; // Keep default "no records" message
+            }
+
+            recordsContainer.innerHTML = '';
+
+            monthlyData.forEach((record, index) => {
+                const monthlyIncome = record.income || 0;
+                const monthlyExpenses = (record.rent || 0) + (record.food || 0) + (record.clothes || 0) +
+                    (record.transport || 0) + (record.leisure || 0) + (record.other || 0);
+                const monthlySavings = Math.max(0, monthlyIncome - monthlyExpenses);
+
+                const recordCard = document.createElement('div');
+                recordCard.className = 'bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-lg border-l-4 border-blue-500';
+
+                recordCard.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">${record.month} ${record.year}</h3>
+                            <p class="text-sm text-gray-600">Added on ${new Date(record.createdDate).toLocaleDateString()}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-bold text-green-600">Saved: ${formatCurrency(monthlySavings)}</p>
+                            <p class="text-sm text-gray-600">Income: ${formatCurrency(monthlyIncome)}</p>
+                            <p class="text-sm text-gray-600">Expenses: ${formatCurrency(monthlyExpenses)}</p>
+                        </div>
+                    </div>
+                `;
+
+                recordsContainer.appendChild(recordCard);
+            });
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            if (confirm('Are you sure you want to logout? 👋')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Set current year automatically
+        function setCurrentYear() {
+            const currentYear = new Date().getFullYear();
+            document.getElementById('year').value = currentYear;
+        }
+
+        // Handle monthly form submission
+        document.getElementById('monthlyForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = errorDiv.querySelector('p');
+
+            // Clear previous errors
+            errorDiv.classList.add('hidden');
+
+            // Validate month selection
+            if (!month) {
+                errorText.textContent = 'Please select a month! 📅';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Get form data
+            const monthlyData = {
+                month: month,
+                year: year,
+                income: parseFloat(document.getElementById('income').value) || 0,
+                rent: parseFloat(document.getElementById('rent').value) || 0,
+                food: parseFloat(document.getElementById('food').value) || 0,
+                clothes: parseFloat(document.getElementById('clothes').value) || 0,
+                transport: parseFloat(document.getElementById('transport').value) || 0,
+                leisure: parseFloat(document.getElementById('leisure').value) || 0,
+                other: parseFloat(document.getElementById('other').value) || 0,
+                createdDate: new Date().toISOString(),
+                username: currentUser
+            };
+
+            // Validate negative numbers
+            const fields = ['income', 'rent', 'food', 'clothes', 'transport', 'leisure', 'other'];
+            for (let field of fields) {
+                if (monthlyData[field] < 0) {
+                    errorText.textContent = `Please enter a positive number for ${field}! 💰`;
+                    errorDiv.classList.remove('hidden');
+                    return;
+                }
+            }
+
+            // Check for duplicate month/year combination
+            const existingMonthlyData = JSON.parse(localStorage.getItem(`monthlyData_${currentUser}`) || '[]');
+            const duplicate = existingMonthlyData.find(record =>
+                record.month === month && record.year === year
+            );
+
+            if (duplicate) {
+                errorText.textContent = `You already have data for ${month} ${year}! Please select a different month. 📅`;
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Save monthly data
+            existingMonthlyData.push(monthlyData);
+            localStorage.setItem(`monthlyData_${currentUser}`, JSON.stringify(existingMonthlyData));
+
+            // Reset form
+            document.getElementById('monthlyForm').reset();
+            setCurrentYear(); // Reset year to current year
+
+            // Reload data to update display
+            loadMonthlyRecords();
+            updateComparisonAndChart();
+
+            alert('📊 Monthly data saved successfully!');
+        });
+
+        // Update comparison and chart sections
+        function updateComparisonAndChart() {
+            updateMonthTabs();
+            updateComparison();
+            updateChart();
+        }
+
+        // Update plan vs reality comparison
+        function updateComparison() {
+            const financialData = JSON.parse(localStorage.getItem(`financialData_${currentUser}`) || '[]');
+            const monthlyData = JSON.parse(localStorage.getItem(`monthlyData_${currentUser}`) || '[]');
+            const comparisonContent = document.getElementById('comparisonContent');
+
+            if (financialData.length === 0 || monthlyData.length === 0) {
+                comparisonContent.innerHTML = '<p class="text-center text-gray-500 py-4">Add monthly data to see how your actual spending compares to your original plan!</p>';
+                return;
+            }
+
+            const plan = financialData[financialData.length - 1];
+
+            // Find selected month or use latest
+            let selectedMonth = monthlyData[monthlyData.length - 1];
+            if (currentSelectedMonth) {
+                selectedMonth = monthlyData.find(record =>
+                    record.month === currentSelectedMonth.month && record.year === currentSelectedMonth.year
+                ) || selectedMonth;
+            }
+
+            const latestMonth = selectedMonth;
+
+            // Calculate plan vs actual
+            const planCategories = [
+                { name: 'Income', plan: plan.monthlyRevenue, actual: latestMonth.income, emoji: '💰' },
+                { name: 'Rent', plan: plan.rent, actual: latestMonth.rent, emoji: '🏠' },
+                { name: 'Food', plan: plan.food, actual: latestMonth.food, emoji: '🍔' },
+                { name: 'Clothes', plan: plan.clothes, actual: latestMonth.clothes, emoji: '👕' },
+                { name: 'Transport', plan: plan.transport, actual: latestMonth.transport, emoji: '🚗' },
+                { name: 'Leisure', plan: plan.leisure, actual: latestMonth.leisure, emoji: '🎮' },
+                { name: 'Other', plan: plan.other, actual: latestMonth.other, emoji: '📦' }
+            ];
+
+            let comparisonHTML = `
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="md:col-span-2 lg:col-span-3 text-center mb-4">
+                        <h4 class="text-lg font-bold text-gray-800">Latest Month: ${latestMonth.month} ${latestMonth.year}</h4>
+                    </div>
+            `;
+
+            planCategories.forEach(category => {
+                const difference = category.actual - category.plan;
+                const isOver = difference > 0;
+                const diffColor = category.name === 'Income'
+                    ? (isOver ? 'text-green-600' : 'text-red-600')
+                    : (isOver ? 'text-red-600' : 'text-green-600');
+
+                comparisonHTML += `
+                    <div class="bg-white p-4 rounded-lg border border-gray-200">
+                        <div class="flex items-center mb-2">
+                            <span class="text-xl mr-2">${category.emoji}</span>
+                            <h5 class="font-bold text-gray-800">${category.name}</h5>
+                        </div>
+                        <p class="text-sm text-gray-600">Plan: ${formatCurrency(category.plan)}</p>
+                        <p class="text-sm text-gray-600">Actual: ${formatCurrency(category.actual)}</p>
+                        <p class="text-sm font-medium ${diffColor}">
+                            ${difference >= 0 ? '+' : ''}${formatCurrency(Math.abs(difference))}
+                        </p>
+                    </div>
+                `;
+            });
+
+            comparisonHTML += '</div>';
+            comparisonContent.innerHTML = comparisonHTML;
+        }
+
+        // Chart instance
+        let expenseChart = null;
+        let currentSelectedMonth = null;
+
+        // Update month tabs
+        function updateMonthTabs() {
+            const monthlyData = JSON.parse(localStorage.getItem(`monthlyData_${currentUser}`) || '[]');
+            const tabsContainer = document.getElementById('monthTabs');
+
+            if (monthlyData.length === 0) {
+                tabsContainer.innerHTML = '<button class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg text-sm">No data available</button>';
+                return;
+            }
+
+            let tabsHTML = '';
+            monthlyData.forEach((record, index) => {
+                const isActive = index === 0 && !currentSelectedMonth ||
+                    (currentSelectedMonth && currentSelectedMonth.month === record.month && currentSelectedMonth.year === record.year);
+                tabsHTML += `
+                    <button onclick="selectMonth('${record.month}', '${record.year}')"
+                            class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${isActive ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}">
+                        ${record.month} ${record.year}
+                    </button>
+                `;
+            });
+
+            tabsContainer.innerHTML = tabsHTML;
+
+            // Select first month if none selected
+            if (!currentSelectedMonth && monthlyData.length > 0) {
+                currentSelectedMonth = { month: monthlyData[0].month, year: monthlyData[0].year };
+            }
+        }
+
+        // Select specific month tab
+        function selectMonth(month, year) {
+            currentSelectedMonth = { month, year };
+            updateMonthTabs();
+            updateComparison();
+            updateChart();
+        }
+
+        // Update spending chart with Chart.js
+        function updateChart() {
+            const monthlyData = JSON.parse(localStorage.getItem(`monthlyData_${currentUser}`) || '[]');
+            const chartContent = document.getElementById('chartContent');
+            const canvas = document.getElementById('expenseChart');
+
+            if (monthlyData.length === 0) {
+                chartContent.style.display = 'block';
+                canvas.style.display = 'none';
+                chartContent.innerHTML = '<p class="text-center text-gray-500 py-8">No data available yet. Submit your monthly expenses to see the chart!</p>';
+                return;
+            }
+
+            chartContent.style.display = 'none';
+            canvas.style.display = 'block';
+
+            // Destroy existing chart
+            if (expenseChart) {
+                expenseChart.destroy();
+            }
+
+            // Prepare data for all months
+            const labels = monthlyData.map(record => `${record.month} ${record.year}`);
+            const categories = ['rent', 'food', 'clothes', 'transport', 'leisure', 'other'];
+            const categoryLabels = ['🏠 Rent', '🍔 Food', '👕 Clothes', '🚗 Transport', '🎮 Leisure', '📦 Other'];
+            const colors = ['#3B82F6', '#EAB308', '#EC4899', '#10B981', '#8B5CF6', '#6B7280'];
+
+            const datasets = categories.map((category, index) => ({
+                label: categoryLabels[index],
+                data: monthlyData.map(record => record[category] || 0),
+                backgroundColor: colors[index],
+                borderColor: colors[index],
+                borderWidth: 1
+            }));
+
+            const ctx = canvas.getContext('2d');
+            expenseChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Monthly Expenses by Category',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Months'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amount (XAF)'
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return new Intl.NumberFormat('en-US').format(value) + ' XAF';
+                                }
+                            }
+                        }
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.dataset.label + ': ' + formatCurrency(context.raw);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize history page
+        setCurrentYear();
+        loadPlan();
+        loadMonthlyRecords();
+        updateComparisonAndChart();
+    </script>
+</body>
+
+</html>

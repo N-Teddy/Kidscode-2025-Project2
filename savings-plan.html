@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings Plan - My Personal Expense Advisor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes bounce-gentle {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-bounce-gentle {
+            animation: bounce-gentle 2s infinite;
+        }
+
+        .animate-fade-in {
+            animation: fade-in 1s ease-out;
+        }
+
+        .animate-fade-in-delay {
+            animation: fade-in 1s ease-out 0.3s both;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 min-h-screen">
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                        <span class="text-white text-xl font-bold">💰</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">MoneyMate</h1>
+                        <p class="text-xs text-gray-500">Your Financial Friend</p>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <a href="dashboard.html"
+                        class="bg-purple-100 hover:bg-purple-200 text-purple-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-1">
+                        <span>📊</span><span class="hidden sm:inline">Dashboard</span>
+                    </a>
+                    <a href="savings-plan.html"
+                        class="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-1">
+                        <span>🎯</span><span class="hidden sm:inline">Savings Plan</span>
+                    </a>
+                    <a href="history.html"
+                        class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-1">
+                        <span>📈</span><span class="hidden sm:inline">History</span>
+                    </a>
+                    <button id="logoutBtn"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-1">
+                        <span>🚪</span><span class="hidden sm:inline">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Savings Plan Header -->
+        <div class="bg-white rounded-3xl shadow-xl p-6 mb-8 text-center animate-fade-in">
+            <h1
+                class="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 mb-4">
+                Your Savings Plan 🎯
+            </h1>
+            <p class="text-gray-600 text-lg">Here's your personalized financial plan to help you reach your goals!</p>
+        </div>
+
+        <!-- Plan Display Section -->
+        <div id="planDisplay" class="bg-white rounded-3xl shadow-xl p-8 mb-8 animate-fade-in-delay">
+            <div class="text-center mb-6">
+                <!-- <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/44948895-6b18-4d33-a3c2-7141d63cadac.png"
+                    alt="Cartoon character with money plan and charts, celebrating financial success, colorful child-friendly illustration"
+                    class="mx-auto rounded-lg shadow-md mb-4" /> -->
+                <h2 class="text-2xl font-bold text-gray-800">📋 Your Financial Plan</h2>
+            </div>
+
+            <div id="planContent" class="space-y-4">
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-blue-800 mb-2">💬 Plan Status</h3>
+                    <p class="text-blue-700" id="planMessage">Generate your plan from the dashboard first!</p>
+                </div>
+
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-green-800 mb-2">💡 Recommendation</h3>
+                    <p class="text-green-700" id="planSuggestion">Complete your budget setup to see recommendations.</p>
+                </div>
+
+                <div class="bg-purple-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-purple-800 mb-2">🎯 Recommended Monthly Savings</h3>
+                    <p class="text-2xl font-bold text-purple-900" id="recommendedSavings">0 XAF</p>
+                </div>
+
+                <!-- Detailed Expense Reduction Breakdown -->
+                <div id="expenseBreakdown" class="bg-orange-50 p-6 rounded-lg hidden">
+                    <h3 class="text-lg font-bold text-orange-800 mb-4">✂️ Detailed Reduction Plan</h3>
+                    <div class="grid md:grid-cols-2 gap-4" id="reductionDetails">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <!-- <div class="bg-white rounded-3xl shadow-xl p-8 mb-8 animate-fade-in-delay">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">📊 Your Savings Progress</h2>
+
+            <div class="space-y-6">
+                <div class="bg-gray-100 p-6 rounded-lg">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-gray-800">💰 Overall Savings Goal Progress</h3>
+                        <span class="text-lg font-bold text-gray-600" id="progressPercentage">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-6">
+                        <div id="progressBar"
+                            class="bg-gradient-to-r from-green-400 to-blue-500 h-6 rounded-full transition-all duration-500"
+                            style="width: 0%"></div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2" id="progressText">Start saving to see your progress!</p>
+                </div>
+
+                <div class="bg-yellow-50 p-6 rounded-lg text-center">
+                    <h3 class="text-lg font-bold text-yellow-800 mb-4">⭐ Your Savings Achievement</h3>
+                    <div class="flex justify-center space-x-2 mb-3" id="starRating">
+                        <span class="text-4xl text-gray-300">⭐</span>
+                        <span class="text-4xl text-gray-300">⭐</span>
+                        <span class="text-4xl text-gray-300">⭐</span>
+                        <span class="text-4xl text-gray-300">⭐</span>
+                        <span class="text-4xl text-gray-300">⭐</span>
+                    </div>
+                    <p class="text-yellow-700 font-semibold" id="starMessage">Achieve your savings goals to earn stars!
+                    </p>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Monthly Follow-up Records -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8 animate-fade-in-delay">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">📅 Monthly Progress Records</h2>
+
+            <div id="monthlyRecords" class="space-y-4">
+                <div class="text-center text-gray-500 py-8">
+                    <p class="text-lg">No monthly records yet!</p>
+                    <p>Go to History page to add your monthly follow-up data.</p>
+                    <a href="history.html"
+                        class="inline-block mt-4 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300">
+                        📈 Add Monthly Data
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Savings Plan Logic -->
+    <script>
+        let currentUser = localStorage.getItem('currentUser');
+
+        // Check if user is logged in
+        if (!currentUser) {
+            alert('Please login first!');
+            window.location.href = 'login.html';
+        }
+
+        // Format currency with thousand separators
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US').format(amount) + ' XAF';
+        }
+
+        // Update star rating based on savings achievement percentage
+        function updateStarRating(percentage) {
+            const stars = document.querySelectorAll('#starRating span');
+            const starMessage = document.getElementById('starMessage');
+
+            let starCount = 0;
+            if (percentage >= 20) starCount = 1;
+            if (percentage >= 40) starCount = 2;
+            if (percentage >= 60) starCount = 3;
+            if (percentage >= 80) starCount = 4;
+            if (percentage >= 100) starCount = 5;
+
+            // Update star display
+            stars.forEach((star, index) => {
+                if (index < starCount) {
+                    star.className = 'text-4xl text-yellow-400';
+                } else {
+                    star.className = 'text-4xl text-gray-300';
+                }
+            });
+
+            // Update message
+            const messages = [
+                "Just getting started! Keep going! 🌱",
+                "Good progress! You're on track! 🚀",
+                "Great work! You're doing amazing! ⭐",
+                "Excellent! You're a savings superstar! 🌟",
+                "Perfect! You've mastered saving! 👑"
+            ];
+
+            starMessage.textContent = starCount > 0 ? messages[starCount - 1] : "Achieve your savings goals to earn stars!";
+        }
+
+        // Calculate and update progress
+        function updateProgress() {
+            const financialData = JSON.parse(localStorage.getItem(`financialData_${currentUser}`) || '[]');
+            const monthlyData = JSON.parse(localStorage.getItem(`monthlyData_${currentUser}`) || '[]');
+
+            if (financialData.length === 0) {
+                return; // No plan created yet
+            }
+
+            const latestPlan = financialData[financialData.length - 1];
+
+            // Calculate total actual savings from monthly records
+            let totalActualSavings = 0;
+            monthlyData.forEach(record => {
+                const monthlyIncome = record.income || 0;
+                const monthlyExpenses = (record.rent || 0) + (record.food || 0) + (record.clothes || 0) +
+                    (record.transport || 0) + (record.leisure || 0) + (record.other || 0);
+                const monthlySavings = Math.max(0, monthlyIncome - monthlyExpenses);
+                totalActualSavings += monthlySavings;
+            });
+
+            // Calculate target savings (goal × number of months with data)
+            const targetSavings = latestPlan.savingsGoal * Math.max(1, monthlyData.length);
+            const progressPercentage = targetSavings > 0 ? Math.min(100, (totalActualSavings / targetSavings) * 100) : 0;
+
+            // Update progress bar
+            document.getElementById('progressBar').style.width = progressPercentage + '%';
+            document.getElementById('progressPercentage').textContent = progressPercentage.toFixed(1) + '%';
+            document.getElementById('progressText').textContent =
+                `You've saved ${formatCurrency(totalActualSavings)} of your ${formatCurrency(targetSavings)} target!`;
+
+            // Update star rating
+            updateStarRating(progressPercentage);
+        }
+
+        // Generate detailed expense reduction advice
+        function generateExpenseAdvice(planData, plan) {
+            const expenseBreakdown = document.getElementById('expenseBreakdown');
+            const reductionDetails = document.getElementById('reductionDetails');
+
+            if (plan.status === 'deficit') {
+                expenseBreakdown.classList.remove('hidden');
+
+                const totalExpenses = planData.rent + planData.food + planData.clothes +
+                    planData.transport + planData.leisure + planData.other;
+                const flexibleExpenses = planData.food + planData.clothes + planData.transport +
+                    planData.leisure + planData.other;
+                const deficit = totalExpenses - planData.monthlyRevenue;
+
+                // Calculate reduction needed (20% of flexible expenses or deficit, whichever is smaller)
+                const reductionNeeded = Math.min(flexibleExpenses * 0.2, deficit);
+
+                // Distribute reduction across flexible categories proportionally
+                const categories = [
+                    { name: 'Food', emoji: '🍔', amount: planData.food, key: 'food' },
+                    { name: 'Clothes', emoji: '👕', amount: planData.clothes, key: 'clothes' },
+                    { name: 'Transport', emoji: '🚗', amount: planData.transport, key: 'transport' },
+                    { name: 'Leisure', emoji: '🎮', amount: planData.leisure, key: 'leisure' },
+                    { name: 'Other', emoji: '📦', amount: planData.other, key: 'other' }
+                ];
+
+                let adviceHTML = '';
+
+                categories.forEach(category => {
+                    if (category.amount > 0) {
+                        // Calculate proportional reduction for this category
+                        const categoryReduction = (category.amount / flexibleExpenses) * reductionNeeded;
+                        const newAmount = category.amount - categoryReduction;
+                        const reductionPercentage = ((categoryReduction / category.amount) * 100).toFixed(1);
+
+                        // Generate specific advice for each category
+                        const advice = getSpecificAdvice(category.key, categoryReduction);
+
+                        adviceHTML += `
+                            <div class="bg-white p-4 rounded-lg border-l-4 border-orange-400">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-2xl mr-2">${category.emoji}</span>
+                                    <h4 class="font-bold text-gray-800">${category.name}</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">
+                                    Current: ${formatCurrency(category.amount)} →
+                                    <span class="font-semibold text-green-600">Target: ${formatCurrency(newAmount)}</span>
+                                </p>
+                                <p class="text-sm text-orange-700 font-medium mb-2">
+                                    Reduce by ${formatCurrency(categoryReduction)} (${reductionPercentage}%)
+                                </p>
+                                <p class="text-xs text-gray-600">${advice}</p>
+                            </div>
+                        `;
+                    }
+                });
+
+                reductionDetails.innerHTML = adviceHTML;
+            } else {
+                expenseBreakdown.classList.add('hidden');
+            }
+        }
+
+        // Get specific advice for each expense category
+        function getSpecificAdvice(category, reductionAmount) {
+            const adviceMap = {
+                food: `💡 Try cooking more meals at home, buy generic brands, or plan your meals to avoid waste. Look for discounts and shop with a list!`,
+                clothes: `💡 Shop only when necessary, look for sales, consider second-hand options, or swap clothes with friends and family.`,
+                transport: `💡 Walk or bike for short distances, use public transport, carpool with friends, or combine multiple errands in one trip.`,
+                leisure: `💡 Choose free activities like reading, playing outdoor games, or visiting free parks instead of paid entertainment.`,
+                other: `💡 Review this category carefully - avoid impulse purchases, compare prices before buying, and ask yourself "Do I really need this?"`
+            };
+
+            return adviceMap[category] || '💡 Look for ways to reduce this expense through careful planning and smart choices.';
+        }
+
+        // Load and display plan
+        function loadPlan() {
+            const financialData = JSON.parse(localStorage.getItem(`financialData_${currentUser}`) || '[]');
+
+            if (financialData.length === 0) {
+                document.getElementById('planMessage').textContent = 'No plan found! Please create your budget in the Dashboard first.';
+                document.getElementById('planSuggestion').textContent = 'Go to Dashboard to set up your financial plan.';
+                document.getElementById('recommendedSavings').textContent = '0 XAF';
+                return;
+            }
+
+            const latestPlan = financialData[financialData.length - 1];
+            const plan = latestPlan.plan;
+
+            // Display plan information
+            document.getElementById('planMessage').textContent = plan.message;
+            document.getElementById('planSuggestion').textContent = plan.suggestion;
+            document.getElementById('recommendedSavings').textContent = formatCurrency(plan.recommendedSavings);
+
+            // Generate detailed expense advice
+            generateExpenseAdvice(latestPlan, plan);
+
+            // Update progress
+            updateProgress();
+        }
+
+        // Load monthly records
+        function loadMonthlyRecords() {
+            const monthlyData = JSON.parse(localStorage.getItem(`monthlyData_${currentUser}`) || '[]');
+            const recordsContainer = document.getElementById('monthlyRecords');
+
+            if (monthlyData.length === 0) {
+                return; // Keep default "no records" message
+            }
+
+            recordsContainer.innerHTML = '';
+
+            monthlyData.forEach((record, index) => {
+                const monthlyIncome = record.income || 0;
+                const monthlyExpenses = (record.rent || 0) + (record.food || 0) + (record.clothes || 0) +
+                    (record.transport || 0) + (record.leisure || 0) + (record.other || 0);
+                const monthlySavings = Math.max(0, monthlyIncome - monthlyExpenses);
+
+                const recordCard = document.createElement('div');
+                recordCard.className = 'bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-lg border-l-4 border-blue-500';
+
+                recordCard.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">${record.month} ${record.year}</h3>
+                            <p class="text-sm text-gray-600">Added on ${new Date(record.createdDate).toLocaleDateString()}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-bold text-green-600">Saved: ${formatCurrency(monthlySavings)}</p>
+                            <p class="text-sm text-gray-600">Income: ${formatCurrency(monthlyIncome)}</p>
+                            <p class="text-sm text-gray-600">Expenses: ${formatCurrency(monthlyExpenses)}</p>
+                        </div>
+                    </div>
+                `;
+
+                recordsContainer.appendChild(recordCard);
+            });
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            if (confirm('Are you sure you want to logout? 👋')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Initialize savings plan page
+        loadPlan();
+        loadMonthlyRecords();
+    </script>
+</body>
+
+</html>

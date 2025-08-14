@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Expense Advisor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes bounce-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-bounce-gentle {
+            animation: bounce-gentle 2s infinite;
+        }
+        .animate-fade-in {
+            animation: fade-in 1s ease-out;
+        }
+        .animate-fade-in-delay {
+            animation: fade-in 1s ease-out 0.3s both;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-screen">
+        <!-- Main Welcome Card -->
+        <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-4xl w-full text-center animate-fade-in">
+            <!-- Hero Image -->
+            <div class="mb-8 animate-bounce-gentle">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/dee0b136-4b1b-460b-a301-0a73aa71340b.png" alt="Cheerful cartoon piggy bank with coins and dollar signs around it, smiling face, bright pastel colors, child-friendly illustration style" class="mx-auto rounded-2xl shadow-lg" />
+            </div>
+            
+            <!-- Title -->
+            <h1 class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-6 animate-fade-in-delay">
+                Welcome to Your Expense Advisor!
+            </h1>
+            
+            <!-- Description -->
+            <div class="text-lg md:text-xl text-gray-700 mb-8 space-y-4 animate-fade-in-delay">
+                <p class="leading-relaxed">
+                    🌟 Ready to become a money superhero? Our fun expense advisor will help you:
+                </p>
+                <div class="grid md:grid-cols-3 gap-4 mt-6">
+                    <div class="bg-gradient-to-br from-green-100 to-green-200 p-4 rounded-xl">
+                        <div class="text-3xl mb-2">💰</div>
+                        <p class="font-semibold text-green-800">Track Your Money</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-100 to-blue-200 p-4 rounded-xl">
+                        <div class="text-3xl mb-2">📊</div>
+                        <p class="font-semibold text-blue-800">Make Smart Plans</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-100 to-purple-200 p-4 rounded-xl">
+                        <div class="text-3xl mb-2">⭐</div>
+                        <p class="font-semibold text-purple-800">Earn Savings Stars</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center animate-fade-in-delay">
+                <a href="register.html" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-4 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
+                    🚀 Create Account
+                </a>
+                <a href="login.html" class="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-4 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
+                    🔑 Login
+                </a>
+            </div>
+            
+            <!-- Additional Info -->
+            <div class="mt-8 text-sm text-gray-600 animate-fade-in-delay">
+                <p>Already have an account? Click Login to continue your savings journey!</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="mt-8 text-center text-gray-500 animate-fade-in-delay">
+            <p>Start your financial adventure today! 🎯</p>
+        </div>
+    </div>
+</body>
+</html>
+
